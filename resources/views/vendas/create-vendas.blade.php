@@ -28,7 +28,11 @@
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
-
+<style>
+    #marcas {
+        display: none;
+    }
+</style>
   
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -240,21 +244,30 @@
                   <div class="form-group row">
                     <label for="inputEmail3" class="col-sm-2 col-form-label">Produto</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" name="produto"id="inputEmail3" placeholder="Nome do Produto">
+                    <select class="form-control"  id="produto" name="produto">
+                        <option value="">Selecione um produto</option>
+                        @foreach ($dados as $produto)
+                          <option value="{{ $produto->id }}">{{ $produto->produto }}</option>
+                        @endforeach
+                      </select>
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label for="inputPassword3" class="col-sm-2 col-form-label" >Marca</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control"  id="marca" name="marca" placeholder="Marca">
+                    <select class="form-control" id="marca" name="marca">
+                    <option value="">Aguarde...</option>
+                </select>
                     </div>
                   </div>
 
                   <div class="form-group row">
                     <label for="inputPassword3" class="col-sm-2 col-form-label" >Preço</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control"  id="preco" name="preco" step="0.01" oninput="calcularTotal()" placeholder="Valor do Produto">
+                    <select class="form-control" id="preco" name="preco" oninput="calcularTotal()">
+                    <option value="">Aguarde...</option>
+                </select>
                     </div>
                   </div>
 
@@ -268,12 +281,12 @@
                   <div class="form-group row">
                     <label for="inputPassword3" class="col-sm-2 col-form-label">Total</label>
                     <div class="col-sm-10">
-                      <input type="number" class="form-control" id="quantidade" name="total" oninput="calcularTotal()" placeholder="Quantidade">
+                      <input type="number" class="form-control" id="quantidade" name="total" oninput="calcularTotal()" placeholder="Total">
                     </div>
                   </div>
 
                   <div class="form-group row">
-                    <label style="font-size:50px;" for="inputPassword3" class="col-sm-2 col-form-label">Total</label>
+                    <label style="font-size:50px; color:#008110" for="inputPassword3" class="col-sm-2 col-form-label">Total</label>
                     <div class="col-sm-10" >
                     <span style="font-size:50px; color:green" name ="total" id="total"></span>
                     </div>
@@ -370,5 +383,61 @@
         }
 
 </script>
+
+<script>
+        // Obtém o elemento <select> com id "produto"
+        var produtoSelect = document.getElementById("produto");
+
+        // Adiciona um evento "change" no elemento <select>
+        produtoSelect.addEventListener("change", function() {
+            // Obtém o valor selecionado do elemento <select>
+            var produtoSelecionado = produtoSelect.value;
+
+            // Faz uma chamada AJAX para buscar as marcas correspondentes ao produto selecionado
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'exibir_marcas?produto=' + produtoSelecionado);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Atualiza a lista de marcas com as marcas correspondentes
+                    document.getElementById('marca').innerHTML = xhr.responseText;
+                }
+                else {
+                    // Exibe uma mensagem de erro se ocorrer um erro na chamada AJAX
+                    alert('Erro na chamada AJAX');
+                }
+            };
+            xhr.send();
+        });
+
+    </script>
+
+<script>
+        // Obtém o elemento <select> com id "produto"
+        var produtoSelect = document.getElementById("produto");
+
+        // Adiciona um evento "change" no elemento <select>
+        produtoSelect.addEventListener("change", function() {
+            // Obtém o valor selecionado do elemento <select>
+            var produtoSelecionado = produtoSelect.value;
+
+            // Faz uma chamada AJAX para buscar as marcas correspondentes ao produto selecionado
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'buscarPrecoPorMarca?produto=' + produtoSelecionado);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Atualiza a lista de marcas com as marcas correspondentes
+                    document.getElementById('preco').innerHTML = xhr.responseText;
+                }
+                else {
+                    // Exibe uma mensagem de erro se ocorrer um erro na chamada AJAX
+                    alert('Erro na chamada AJAX');
+                }
+            };
+            xhr.send();
+        });
+
+
+        </script>
+        @stack('scripts')
 </body>
 </html>

@@ -42,3 +42,9 @@ Route::get('/vendas', [VendasController::class, 'vendas'])->name('vendas.vendas'
 Route::get('/create-vendas', [VendasController::class, 'create_vendas']);
 Route::get('/create-vendas', [VendasController::class, 'create_vendas']);
 Route::post('/insert_vendas', [VendasController::class, 'insert_vendas']);
+
+ Route::get('/exibir_marcas', [VendasController::class, 'buscarMarcasPorProduto']);
+
+ Route::get('/buscarValorPorProdutoEMarca', [VendasController::class, 'buscarValorPorProdutoEMarca']);
+
+ Route::get('/buscarPrecoPorMarca', [VendasController::class, 'buscarPrecoPorMarca'])->name('buscarPrecoPorMarca');
