@@ -303,25 +303,26 @@
                 @csrf
                 <div class="card-body">
                   <div class="form-group row">
-                    <label for="inputEmail3" class="col-sm-2 col-form-label">Produto</label>
+                    <label for="produto" class="col-sm-2 col-form-label">Produto</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" name="produto"id="inputEmail3" placeholder="Nome do Produto">
+                      <input type="text" class="form-control" name="produto" id="produto" placeholder="Nome do Produto">
+                      <input type="hidden" name="produto_id" id="produto_id">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-2 col-form-label">Preço</label>
+                    <label for="preco" class="col-sm-2 col-form-label">Preço</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" name="preco"id="inputPassword3" placeholder="Valor do Produto">
+                      <input type="text" class="form-control" name="preco"id="preco" placeholder="Valor do Produto">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-2 col-form-label">Marca</label>
+                    <label for="marca" class="col-sm-2 col-form-label">Marca</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" name="marca" id="inputPassword3" placeholder="Marca">
+                      <input type="text" class="form-control" name="marca" id="marca" placeholder="Marca">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-2 col-form-label">Tipo da Remessa</label>
+                    <label for="" class="col-sm-2 col-form-label">Tipo da Remessa</label>
                     <div class="col-sm-10">
                     <select class="form-control" name="tipo">
                     <option value="selecione">Selecione</option>
@@ -334,15 +335,15 @@
                   </div>
                   </div>
                   <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-2 col-form-label">Quantidade</label>
+                    <label for="Quantidade" class="col-sm-2 col-form-label">Quantidade</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" name="quantidade" id="inputPassword3" placeholder="Quantidade">
+                      <input type="text" class="form-control" name="quantidade" id="Quantidade" placeholder="Quantidade">
                     </div>
                   </div>
                   <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-2 col-form-label">Codigos de Barras</label>
+                    <label for="codigo_barras" class="col-sm-2 col-form-label">Codigos de Barras</label>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" name="codigo_barras" id="inputPassword3" placeholder="Codigos de Barras">
+                      <input type="text" class="form-control" name="codigo_barras" id="codigo_barras" placeholder="Codigos de Barras">
                     </div>
                   </div>
                 </div>
@@ -394,6 +395,34 @@
 <!-- AdminLTE App -->
 <script src="vendor/plugins/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
+
+<script>
+$(document).ready(function() {
+  $('#produto').autocomplete({
+    source: function(request, response) {
+      $.ajax({
+        url: '/buscarProdutos',
+        dataType: 'json',
+        data: {
+          termo: request.term
+        },
+        success: function(data) {
+          response($.map(data, function(item) {
+            return {
+              label: item.nome,
+              value: item.id
+            }
+          }));
+        }
+      });
+    },
+    minLength: 3,
+    select: function(event, ui) {
+      $('#produto_id').val(ui.item.value);
+    }
+  });
+});
+</script>
 </body>
 </html>
 

@@ -238,40 +238,31 @@
               </div>
             
               <form class="form-horizontal" action="insert_vendas" method="Post">
+                @csrf
+                
                 <div class="card-body">
 
                 <div class="form-group row">
-                    <label for="tipo_venda" class="col-sm-2 col-form-label" >Pagamento<span style="color:red">*</span></label>
+                    <label for="inputPassword3" class="col-sm-2 col-form-label" >Pagamento<span style="color:red">*</span></label>
                     <div class="col-sm-10">
-                    <select class="form-control" id="tipo_vendas" name="tipo_venda">
+                    <select class="form-control" id="tipo_vendas" name="tipo_vendas">
                     <option value="">Selecione a forma de pagamento</option>
-                    <option value="Cartão de Debito">Cartão de Debito</option>
-                    <option value="credito">Cartão de Crédito</option>
-                    <option value="dinheiro">Dinheiro</option>
-                    <option value="pix">Pix</option>
-                    </select>
+                    <option value="">Cartão de débito</option>
+                    <option value="">Cartão de crédito</option>
+                    <option value="">Dinheiro</option>
+                    <option value="">Pix</option>
+                </select>
                     </div>
                   </div>
-
                   <div class="form-group row">
-                    <label for="codigo_barra" class="col-sm-2 col-form-label">Codigo de Barras</label>
+                    <label for="inputEmail3" class="col-sm-2 col-form-label">Produto</label>
                     <div class="col-sm-10">
-                    <input type="number" class="form-control" id="codigo_barras" name="codigo_barra" placeholder="codigo_barras">
-                    <select class="form-control"  id="codigo_barras" name="codigo_barraxx">
+                    <select class="form-control"  id="produto" name="produto">
                         <option value="">Selecione um produto</option>
                         @foreach ($dados as $produto)
-                          <option value="{{ $produto->codigo_barras }}">{{ $produto->codigo_barras }}</option>
+                          <option value="{{ $produto->id }}">{{ $produto->produto }}</option>
                         @endforeach
                       </select>
-                    </div>
-                  </div>
-                  @csrf
-                  <div class="form-group row">
-                    <label for="inputPassword3" class="col-sm-2 col-form-label" >Produto</label>
-                    <div class="col-sm-10">
-                    <select class="form-control" id="produto" name="produto">
-                    <option value="primeiroProduto">Aguarde...</option>
-                </select>
                     </div>
                   </div>
 
@@ -292,11 +283,11 @@
                 </select>
                     </div>
                   </div>
-                   
+
                   <div class="form-group row">
                     <label for="inputPassword3" class="col-sm-2 col-form-label">Quantidade</label>
                     <div class="col-sm-10">
-                      <input type="number" class="form-control"  id="quantidade" name="quantidade" onchange="calcularTotal()" placeholder="Quantidade"required>
+                      <input type="number" class="form-control" id="quantidade" name="quantidade" oninput="calcularTotal()" placeholder="Quantidade">
                     </div>
                   </div>
 
@@ -319,6 +310,7 @@
                     <a href="produtos" class="btn btn-default">Voltar</a>
                   </div>
                   </div>
+              </form>
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -394,15 +386,15 @@
     });
   });
   
+ 
 
   //Calcular venda
   function calcularTotal() {
-  var quantidade = parseFloat(document.getElementById('quantidade').value);
-  var preco = parseFloat(document.getElementById('preco').value);
-  var total = quantidade * preco;
-  document.getElementById('total').innerHTML = total.toFixed(2);
-}
-
+            var quantidade = parseFloat(document.getElementById('quantidade').value);
+            var preco = parseFloat(document.getElementById('preco').value);
+            var total = quantidade * preco;
+            document.getElementById('total').innerHTML = total.toFixed(2);
+        }
 </script>
 
 <script>
@@ -414,9 +406,12 @@
 	</script>
 
 
+
+
+
 <script>
         // Obtém o elemento <select> com id "produto"
-        var produtoSelect = document.getElementById("codigo_barras");
+        var produtoSelect = document.getElementById("produto");
 
         // Adiciona um evento "change" no elemento <select>
         produtoSelect.addEventListener("change", function() {
@@ -425,7 +420,7 @@
 
             // Faz uma chamada AJAX para buscar as marcas correspondentes ao produto selecionado
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'exibir_marcas?codigo_barras=' + produtoSelecionado);
+            xhr.open('GET', 'exibir_marcas?produto=' + produtoSelecionado);
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     // Atualiza a lista de marcas com as marcas correspondentes
@@ -443,7 +438,7 @@
 
 <script>
         // Obtém o elemento <select> com id "produto"
-        var produtoSelect = document.getElementById("codigo_barras");
+        var produtoSelect = document.getElementById("produto");
 
         // Adiciona um evento "change" no elemento <select>
         produtoSelect.addEventListener("change", function() {
@@ -452,7 +447,7 @@
 
             // Faz uma chamada AJAX para buscar as marcas correspondentes ao produto selecionado
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'buscarPrecoPorMarca?codigo_barras=' + produtoSelecionado);
+            xhr.open('GET', 'buscarPrecoPorMarca?produto=' + produtoSelecionado);
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     // Atualiza a lista de marcas com as marcas correspondentes
@@ -468,34 +463,6 @@
 
 
         </script>
-
-<script>
-        // Obtém o elemento <select> com id "produto"
-        var produtoSelect = document.getElementById("codigo_barras");
-
-        // Adiciona um evento "change" no elemento <select>
-        produtoSelect.addEventListener("change", function() {
-            // Obtém o valor selecionado do elemento <select>
-            var produtoSelecionado = produtoSelect.value;
-
-            // Faz uma chamada AJAX para buscar as marcas correspondentes ao produto selecionado
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'buscarprodutoPorbarras?codigo_barras=' + produtoSelecionado);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    // Atualiza a lista de marcas com as marcas correspondentes
-                    document.getElementById('produto').innerHTML = xhr.responseText;
-                }
-                else {
-                    // Exibe uma mensagem de erro se ocorrer um erro na chamada AJAX
-                    alert('Erro na chamada AJAX');
-                }
-            };
-            xhr.send();
-        });
-        </script>
-
-
         @stack('scripts')
 </body>
 </html>

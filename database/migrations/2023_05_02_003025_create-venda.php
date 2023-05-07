@@ -15,12 +15,14 @@ class CreateVenda extends Migration
     {
         Schema::create('vendas', function (Blueprint $table) {
             
-            $table->id();
+            $table->venda_id();
             $table->string('produto',100);
             $table->string('marca',100);
             $table->string('preco',100);
             $table->string('quantidade',100);
             $table->string('total',100);
+            $table->string('tipo_venda',100);
+            $table->string('codigo_barra',100);
        
         });
     }

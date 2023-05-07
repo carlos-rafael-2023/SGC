@@ -34,7 +34,7 @@ Route::post('/save', [ProdutosController::class, 'save']);
 Route::get('/editar/{id}', [ProdutosController::class, 'editar'])->name('editar');
 Route::post('/update/{id}', [ProdutosController::class, 'update'])->name('update');
 Route::get('/produtos/{id}', [ProdutosController::class, 'excluir'])->name('produtos.excluir');
-
+Route::get('/buscarProdutos', [ProdutosController::class, 'buscarProdutos'])->name('buscarProdutos');
 
 
 //Controller de Vendas
@@ -42,9 +42,16 @@ Route::get('/vendas', [VendasController::class, 'vendas'])->name('vendas.vendas'
 Route::get('/create-vendas', [VendasController::class, 'create_vendas']);
 Route::get('/create-vendas', [VendasController::class, 'create_vendas']);
 Route::post('/insert_vendas', [VendasController::class, 'insert_vendas']);
+Route::get('/vendas/{venda_id}', [VendasController::class, 'excluir'])->name('vendas.excluir');
 
  Route::get('/exibir_marcas', [VendasController::class, 'buscarMarcasPorProduto']);
 
  Route::get('/buscarValorPorProdutoEMarca', [VendasController::class, 'buscarValorPorProdutoEMarca']);
 
- Route::get('/buscarPrecoPorMarca', [VendasController::class, 'buscarPrecoPorMarca'])->name('buscarPrecoPorMarca');
+ Route::get('/buscarPrecoPorMarca', [VendasController::class, 'buscarPrecoPorMarca']);
+
+ Route::get('/buscarprodutoPorbarras', [VendasController::class, 'buscarprodutoPorbarras']);
+
+ 
+
+

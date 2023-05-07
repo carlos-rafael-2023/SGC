@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Venda;
 class HomeController extends Controller
 {
     /**
@@ -24,6 +25,9 @@ class HomeController extends Controller
     public function index()
     {
         $user = user::all();
-        return view('home',['usuarios'=>$user]);
+        $subtotal = Venda::sum('total');
+        $valor_formatado = number_format($subtotal, 2, ',', '.');
+      
+        return view('home',['usuarios'=>$user])->with('valor_formatado',$valor_formatado);
     }
 }

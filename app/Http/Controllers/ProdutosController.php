@@ -5,13 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Produto;
 use Illuminate\Http\Request;
 use Illuminate\Support\HtmlString;
+use \Illuminate\Support\Facades\DB;
 
 class ProdutosController extends Controller
 {
     public function produtos(){
-        
         $produtos = Produto::all();
-        //dd($produtos); 
         return view('produtos.produtos', ['dados'=>$produtos]);
         
     }
@@ -70,7 +69,25 @@ public function excluir($id)
     
     return redirect()->route('produtos.produtos')->with('excluir', new HtmlString('<button type="button" class="btn btn-success ">Produto excluido com sucesso!</button>'));
     }
-       
+   
+    
+    public function buscarProdutos(Request $request)
+    {
+        $termo = $request->input('produto');
+        $produtos = DB::table('produtos')->where('produto', 'LIKE', "%$termo%")->get();
+        dd($termo);
+        return response()->json($produtos);
+    }
+    
+
+
+
+
+
+
+
+
+
 }
 
 

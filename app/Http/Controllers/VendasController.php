@@ -15,8 +15,9 @@ class VendasController extends Controller
     public function vendas(){
         $vendas = Venda::all();
         $subtotal = Venda::sum('total');
+        $valor_formatado = number_format($subtotal, 2, ',', '.');
         $user = user::all();
-        return view('vendas.vendas',['usuarios'=>$user],['infovendas'=>$vendas])->with('subtotal',$subtotal);
+        return view('vendas.vendas',['usuarios'=>$user],['infovendas'=>$vendas])->with('valor_formatado',$valor_formatado);
     }
 
     public function create_vendas(){
@@ -29,21 +30,34 @@ class VendasController extends Controller
     }
 
     public function insert_vendas(request $request){
+        
         $vendas = Venda::create($request->all());
-        if(!empty($vendas)){
+           if(!empty($vendas)){
             return redirect()->route('vendas.vendas')->with('mensagem', new HtmlString('<button type="button" class="btn btn-success  swalDefaultSuccess">Venda cadastrada com sucesso!</button>'));
         }
+        
 
     }
 
 
+    public function excluir($venda_id)
+    {
+        $Venda = Venda::findOrFail($venda_id);
+        $Venda->delete();
+    
+        // Redirecionar para uma página de sucesso ou qualquer outra ação necessária
+        
+        return redirect()->route('vendas.vendas')->with('excluir', new HtmlString('<button type="button" class="btn btn-success ">Venda excluido com sucesso!</button>'));
+        }
+
+
     public function buscarMarcasPorProduto()
     {
-        $produto = request()->get('produto');
+        $codigo_de_barras = request()->get('codigo_barras');
         
         // Consulta as marcas correspondentes ao produto selecionado
         $marcas = DB::table('produtos')
-            ->where('id', '=', $produto)
+            ->where('codigo_barras', '=', $codigo_de_barras)
             ->pluck('marca')
             ->unique();
         
@@ -59,13 +73,14 @@ class VendasController extends Controller
     public function buscarPrecoPorMarca(){
     
         // Recupera a marca e o produto selecionado
-        $produto = request()->get('produto');
+        $codigos_barras = request()->get('codigo_barras');
         
         // Consulta o preço correspondente à marca selecionada
         $preco = DB::table('produtos')
-            ->where('id', '=', $produto)
+            ->where('codigo_barras', '=', $codigos_barras)
             ->pluck('preco')
             ->unique();
+
         // Retorna as marcas como uma lista de opções HTML
         $html = '';
         foreach ($preco as $preco) {
@@ -75,7 +90,24 @@ class VendasController extends Controller
         
     }
 
+    public function buscarprodutoPorbarras(){
     
+        // Recupera a marca e o produto selecionado
+        $codigo_barras = request()->get('codigo_barras');
+        
+        // Consulta o preço correspondente à marca selecionada
+        $produto = DB::table('produtos')
+            ->where('codigo_barras', '=', $codigo_barras)
+            ->pluck('produto')
+            ->unique();
+        // Retorna as marcas como uma lista de opções HTML
+        $html = '';
+        foreach ($produto as $produto) {
+            $html .= '<option value="' . $produto . '">' . $produto . '</option>';
+        }
+        return $html;
+        
+    }
 }
 
     

@@ -4,27 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AdminLTE 3 | Dashboard</title>
-
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="vendor/plugins/fontawesome-free/css/all.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Tempusdominus Bootstrap 4 -->
-  <link rel="stylesheet" href="vendor/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="vendor/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="vendor/plugins/jqvmap/jqvmap.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="vendor/adminlte/dist/css/adminlte.min.css">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="vendor/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="vendor/plugins/daterangepicker/daterangepicker.css">
-  <!-- summernote -->
-  <link rel="stylesheet" href="vendor/plugins/summernote/summernote-bs4.min.css">
+  @include('layouts.app')
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -41,7 +21,7 @@
         <a href="index3.html" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contato</a>
+        <a href="#" class="nav-link">Contact</a>
       </li>
     </ul>
 
@@ -172,24 +152,22 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
-      <img src="dist/img/AdminLTELogo.png" alt="" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <center><b><span style="color:#fff" class="brand-text font-weight-light">SGC</span></b></center>
-      <h6 class="brand-text font-weight-light">Sistema de gerenciamento comercial</h6>
+      <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">AdminLTE 3</span>
     </a>
 
     <!-- Sidebar -->
-    @foreach($usuarios as $usuario)
     <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <!--img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image"-->
+          <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-        <span style="color:#fff" class="brand-text font-weight-light">Usuario: {{$usuario->name}}</span>
-          <a href="#" class="d-block"></a>
+          <a href="#" class="d-block">Alexander Pierce</a>
         </div>
       </div>
-      @endforeach
+
       <!-- SidebarSearch Form -->
       <div class="form-inline">
         <div class="input-group" data-widget="sidebar-search">
@@ -227,11 +205,12 @@
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
-    <!-- Main content -->
+    <!-- /.content-header -->
+
     <section class="content">
       <div class="container-fluid">
         <!-- COLOR PALETTE -->
-        <table class="table table-hover"  id="example1">
+        <table id="example1" class="table table-bordered table-striped">
   <thead>
 
   @if (session('mensagem'))
@@ -252,18 +231,20 @@
     </div>
   @endif
 
-    <div class="float-right">
-    <a href="cadastrar" class="btn btn-success"><i class="fas fa-plus"></i> Nova venda</a>
+  <div class="float-right">
+    <a href="create-vendas" class="btn btn-success"><i class="fas fa-plus"></i> Nova venda</a>
   </div>
   <br>
   <tr>
    
-      <th scope="col">#</th>
+      <th scope="col">Codigo de barras</th>
       <th scope="col">Produto</th>
       <th scope="col">Marca</th>
       <th scope="col">Preço</th>
       <th scope="col">Quantidade</th>
+      <th scope="col">Pagamento</th>
       <th scope="col">Total</th>
+      <th scope="col">Data da venda</th>
       <th scope="col">Ações</th>
     
     </tr>
@@ -271,22 +252,25 @@
   
    @foreach($infovendas as $venda)
     <tr>
-      <td scope="row">{{$venda->produto}}</td>
+      <td scope="row">{{$venda->codigo_barra}}</td>
       <td>{{$venda->produto}}</td>
       <td>{{$venda->marca}}</td>
       <td>{{$venda->preco}}</td>
       <td>{{$venda->quantidade}}</td>
+      <td>{{$venda->tipo_venda}}</td>
       <td>{{$venda->total}}</td>
+      <td>{{$venda->created_at}}</td>
       <td>
-          <a href="" class="btn btn-primary btn-xs"> <i class="fa fa-edit"></i> Alterar</a>
-          <a href="" class="btn btn-danger btn-xs" onclick=" return confirm('Tem certeza que deseja excluir este produto?')"> <i class="fa fa-trash"></i> Excluir</a>
-        </td>
+        <a href="" class="btn btn-primary btn-xs"> <i class="fa fa-edit"></i> Alterar</a>
+        <a href="{{ route('vendas.excluir', $venda->venda_id)}}" class="btn btn-danger btn-xs" onclick=" return confirm('Tem certeza que deseja excluir este produto?')"> <i class="fa fa-trash"></i> Excluir</a>
+      </td>
     </tr>
     @endforeach
   </tbody>
 </table>
-<span style="font-size:25px">Subtotal: </span><span style="font-size:25px; color: green;" >{{$subtotal}}</span>
+<span style="font-size:30px">Total de vendas: </span><span style="font-size:30px; color: green;" >R$ {{$valor_formatado}}</span>
     </section>
+  
   
   </div>
   <!-- /.content-wrapper -->
@@ -339,6 +323,21 @@
 <!-- AdminLTE for demo purposes -->
 <script src="vendor/adminlte/dist/js/pages/dashboard.js"></script>
 
+
+<script src="vendor/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="vendor/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="vendor/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="vendor/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="vendor/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="vendor/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="vendor/plugins/jszip/jszip.min.js"></script>
+<script src="vendor/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="vendor/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="vendor/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="vendor/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="vendor/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+
 <script>
   $(function () {
     $("#example1").DataTable({
@@ -357,5 +356,7 @@
   });
   
 </script>
+
+
 </body>
 </html>
