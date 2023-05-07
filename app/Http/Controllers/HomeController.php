@@ -22,12 +22,5 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-        $user = user::all();
-        $subtotal = Venda::sum('total');
-        $valor_formatado = number_format($subtotal, 2, ',', '.');
-      
-        return view('home',['usuarios'=>$user])->with('valor_formatado',$valor_formatado);
-    }
+    
 }

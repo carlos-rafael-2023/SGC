@@ -226,7 +226,10 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
+              <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit">Sair</button>
+            </form>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProdutosController;
 use App\Http\Controllers\VendasController;
+use App\Http\Controllers\Auth\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +26,7 @@ Auth::routes();
 
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 //Controller de produtos
 Route::get('/produtos', [ProdutosController::class, 'produtos'])->name('produtos.produtos');
